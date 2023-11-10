@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Back-Office</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+            rel="stylesheet">
+        <style>
+    *{margin: 0;padding: 0;box-sizing: border-box;}
+    body {
+        font-family: 'Poppins';
+    }
+</style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <h1>Inserisci nuovi prodotti</h1>
+
+                <form action="new" method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome Prodotto</label>
+                        <input type="text" class="form-control" name="name"
+                            id="name" placeholder="Nome">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrizione</label>
+                        <input type="text" class="form-control"
+                            name="description" id="description"
+                            placeholder="Descrizione">
+                    </div>
+                    <div class="mb-3">
+                        <label for="brand" class="form-label">Brand</label>
+                        <input type="text" class="form-control" name="brand"
+                            id="brand" placeholder="Nome Brand">
+                    </div>
+                    <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Immagine</label>
+                        <input type="url" class="form-control" name="imageUrl"
+                            id="imageUrl" value="https://picsum.photos/300">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Prezzo</label>
+                        <input type="text" class="form-control" name="price"
+                            id="price" placeholder="Prezzo">
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary new">Inserisci</button>
+                </form>
+            </div>
+            <a href="./homepage.html"
+                class="btn btn-ouline-dark border border-dark my-5 ">Vai alla
+                Home</a>
+        </div>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"></script>
+        <script>
+            const newP = document.querySelector(".new");
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  const newProduct = {
+    name: document.getElementById("name").value,
+    description: document.getElementById("description").value, 
+    brand: document.getElementById("brand").value,
+    imageUrl: document.getElementById("imageUrl").value,
+    price: document.getElementById("price").value,
+  };
+
+  fetch("https://striveschool-api.herokuapp.com/api/product/", {
+    method: "POST",
+    body: JSON.stringify(newProduct),
+    headers: {
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRkZTdlMzI1NGU4ODAwMTgzZjE4NzAiLCJpYXQiOjE2OTk2MDQ0NTEsImV4cCI6MTcwMDgxNDA1MX0.Fso8KUf_Ei74-It5EYnLN8VbbQYbmhJOHaAJ-nMV2sc",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((resp) => resp.json())
+    .then((newDataObj) => alert("Product added successfully with ID: " + newDataObj._id))
+    .catch((err) => console.log("Error " + err))};
+
+newP.onclick = handleSubmit;
+        </script>
+    </body>
+</html>
