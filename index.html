@@ -14,12 +14,7 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
             rel="stylesheet">
-        <style>
-    *{margin: 0;padding: 0;box-sizing: border-box;}
-    body {
-        font-family: 'Poppins';
-    }
-</style>
+        <link rel="stylesheet" href="./assets/style.css">
     </head>
     <body>
         <div class="container">
@@ -46,7 +41,7 @@
                     <div class="mb-3">
                         <label for="imageUrl" class="form-label">Immagine</label>
                         <input type="url" class="form-control" name="imageUrl"
-                            id="imageUrl" value="https://picsum.photos/300">
+                            id="imageUrl" placeholder="url Immagine">
                     </div>
                     <div class="mb-3">
                         <label for="price" class="form-label">Prezzo</label>
@@ -74,14 +69,23 @@
 const handleSubmit = (event) => {
   event.preventDefault();
 
-  const newProduct = {
-    name: document.getElementById("name").value,
-    description: document.getElementById("description").value, 
-    brand: document.getElementById("brand").value,
-    imageUrl: document.getElementById("imageUrl").value,
-    price: document.getElementById("price").value,
-  };
+  const name = document.getElementById("name").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const brand = document.getElementById("brand").value.trim();
+    const imageUrl = document.getElementById("imageUrl").value.trim();
+    const price = document.getElementById("price").value.trim();
 
+    if (name === '' || description === '' || brand === '' || imageUrl === '' || price === '') {
+        alert("Per favore, compila tutti i campi obbligatori.");
+    } else {
+        const newProduct = {
+            name,
+            description,
+            brand,
+            imageUrl,
+            price
+        };
+    
   fetch("https://striveschool-api.herokuapp.com/api/product/", {
     method: "POST",
     body: JSON.stringify(newProduct),
@@ -93,7 +97,7 @@ const handleSubmit = (event) => {
   })
     .then((resp) => resp.json())
     .then((newDataObj) => alert("Product added successfully with ID: " + newDataObj._id))
-    .catch((err) => console.log("Error " + err))};
+    .catch((err) => console.log("Error " + err))}};
 
 newP.onclick = handleSubmit;
         </script>

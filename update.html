@@ -9,23 +9,58 @@
             rel="stylesheet"
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     </head>
+    <link rel="stylesheet" href="./assets/style.css">
     <body>
-        <div class="container">
-            <div class="row">
-                <h1>Modifica il prodotto prodotti</h1>
-
-                <form action="modify" method="post">
-
-                    <button type="submit" class="btn btn-primary update">Modifica</button>
-                    <button type="submit" class="btn btn-danger delete"><i class="bi bi-trash3-fill"></i></button>
-                </form>
-
+        <header class="m-3 d-flex justify-content-between">
+            <div></div>
+            <h1>Modifica il prodotto prodotti</h1>
+            <a class="btn btn-outline-primary BO fw-bold" href="./homepage">Vai
+                alla Home</a>
+        </header>
+        <main>
+            <div class="container">
+                <div class="row justify-content-center align-items-center g-3">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome Prodotto</label>
+                        <input type="text" class="form-control" name="name"
+                            id="name" placeholder="Nome">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrizione</label>
+                        <input type="text" class="form-control"
+                            name="description" id="description"
+                            placeholder="Descrizione">
+                    </div>
+                    <div class="mb-3">
+                        <label for="brand" class="form-label">Brand</label>
+                        <input type="text" class="form-control" name="brand"
+                            id="brand" placeholder="Nome Brand">
+                    </div>
+                    <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Immagine</label>
+                        <input type="url" class="form-control" name="imageUrl"
+                            id="imageUrl" placeholder="url Immagine">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Prezzo</label>
+                        <input type="text" class="form-control" name="price"
+                            id="price" placeholder="Prezzo">
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <button type="button" onclick="resetForm()" class="btn btn-secondary">Reset</button>
+                        <button type="submit" onclick="modifyProd()"
+                            class="btn btn-primary update">Modifica</button>
+                        <button type="submit" onclick="deleteProd()"
+                            class="btn btn-danger delete"><i
+                                class="bi bi-trash3-fill"></i></button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <a href="./homepage">Vai alla Home</a>
-            </div>
-        </div>
+        </main>
+
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -34,6 +69,85 @@
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"></script>
-        <script src="./js/script.js"></script>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search)
+            const id =  urlParams.get('id');  
+        window.onload = function() {            
+            fetch("https://striveschool-api.herokuapp.com/api/product/" +id, {                 
+            headers: {
+                Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRkZTdlMzI1NGU4ODAwMTgzZjE4NzAiLCJpYXQiOjE2OTk2MDQ0NTEsImV4cCI6MTcwMDgxNDA1MX0.Fso8KUf_Ei74-It5EYnLN8VbbQYbmhJOHaAJ-nMV2sc",
+                "Content-Type": "application/json",
+                },
+            })
+            .then((resp) => resp.json())
+            .then(thisProd => { 
+                document.querySelector("#name").value = thisProd.name 
+                document.querySelector("#description").value = thisProd.description 
+                document.querySelector("#brand").value = thisProd.brand 
+                document.querySelector("#imageUrl").value = thisProd.imageUrl 
+                document.querySelector("#price").value = thisProd.price
+            }).catch((err) => console.log("Error " + err))};
+
+            function deleteProd() {
+                fetch("https://striveschool-api.herokuapp.com/api/product/" +id, {                 
+                    method: "DELETE",
+                    headers: {
+                        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRkZTdlMzI1NGU4ODAwMTgzZjE4NzAiLCJpYXQiOjE2OTk2MDQ0NTEsImV4cCI6MTcwMDgxNDA1MX0.Fso8KUf_Ei74-It5EYnLN8VbbQYbmhJOHaAJ-nMV2sc"
+                    }
+                })
+                .then(resp => {resp.json();
+                })
+                .then(deletedProd => {        
+                    alert("Hai eliminato il prodotto " + deletedProd.name);
+                })
+                .catch(error => console.log("Errore: ", error));
+                
+                    window.location.assign("./homepage.html");
+                
+            }
+            function modifyProd() {
+                const name = document.getElementById("name").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const brand = document.getElementById("brand").value.trim();
+    const imageUrl = document.getElementById("imageUrl").value.trim();
+    const price = document.getElementById("price").value.trim();
+    if (name === '' || description === '' || brand === '' || imageUrl === '' || price === '') {
+        alert("Per favore, compila tutti i campi obbligatori.");
+    } else {
+        const updatedProduct = {
+            name,
+            description,
+            brand,
+            imageUrl,
+            price
+        };
+                fetch("https://striveschool-api.herokuapp.com/api/product/" + id, {
+                    method: "PUT",
+                    headers: {
+                        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRkZTdlMzI1NGU4ODAwMTgzZjE4NzAiLCJpYXQiOjE2OTk2MDQ0NTEsImV4cCI6MTcwMDgxNDA1MX0.Fso8KUf_Ei74-It5EYnLN8VbbQYbmhJOHaAJ-nMV2sc",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(updatedProduct)
+                })
+                .then(resp => resp.json())
+                .then(updatedProd => {
+                    console.log(updatedProd);
+                    alert("Prodotto aggiornato: " + updatedProd.name);
+                })
+                .catch(error => console.log('Errore: ', error));
+                setTimeout(() => {
+                    window.location.assign("./homepage.html");
+                }, 2000);                    
+            }
+        }
+        function resetForm() {
+    document.getElementById("name").value = "";
+    document.getElementById("description").value = ""; 
+    document.getElementById("brand").value = ""; 
+    document.getElementById("imageUrl").value = ""; 
+    document.getElementById("price").value = ""; 
+}
+        </script>
     </body>
 </html>
