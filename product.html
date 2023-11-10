@@ -13,6 +13,7 @@
     </head>
     <body>
         <header class="m-3 d-flex justify-content-between">
+            <div style="width: 156px;"></div>
             <h1>Pagina Prodotto </h1>
             <a class="btn btn-outline-primary my-3 BO" href="./homepage.html">Torna alla home</a>
         </header>
@@ -35,15 +36,21 @@
                 const id =  urlParams.get('id');
                 fetch("https://striveschool-api.herokuapp.com/api/product/" +id, {
                     headers: {
-                    Authorization:
+                        Authorization:
                         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRkZTdlMzI1NGU4ODAwMTgzZjE4NzAiLCJpYXQiOjE2OTk2MDQ0NTEsImV4cCI6MTcwMDgxNDA1MX0.Fso8KUf_Ei74-It5EYnLN8VbbQYbmhJOHaAJ-nMV2sc",
                     },
                 }).then(resp => resp.json()).then(product=>{
+                    console.log(product);
                     prod.innerHTML = `
                     <h2>${product.name}</h2>    
                         <img class="w-25 rounded-4" src="${product.imageUrl}" alt="${product.description}">
                 <p class="description">${product.description}</p>
-                <span class="fw-bold">${product.price} €</span>`
+                <span class="fw-bold">${product.price} €</span>
+                <span class="d-inline-block w-25">Creato: ${product.createdAt}</span>
+                <span class="d-inline-block w-50">Numero: ${product._id}</span>
+                <span class="d-inline-block w-25">Editato: ${product.updatedAt}</span>
+                
+                `
                 })
                 .catch(error => console.error("Error:", error));
             }
